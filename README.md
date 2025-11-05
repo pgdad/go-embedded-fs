@@ -7,6 +7,7 @@ A Go application that embeds encrypted files in the binary and serves them via H
 - **Encrypted Embedded Files**: Files are encrypted and embedded directly in the Go binary source code
 - **Symmetric Encryption**: Uses AES-256-GCM for secure encryption/decryption
 - **HTTP Server**: Serves decrypted files on-demand via HTTP
+- **File Extraction**: Extract all embedded files to a directory
 - **Configurable Port**: Default port 9193, customizable via command-line flag
 - **Cross-Platform**: Works on Linux, Windows, and macOS
 - **Simple API**: JSON file listing and direct file access
@@ -50,6 +51,38 @@ ENCRYPT_KEY="MySecretKey123" ./go-embedded-fs add document.pdf image.png present
 - Each `add` operation replaces ALL previously embedded files
 - After adding files, you must rebuild the binary: `go build -o go-embedded-fs`
 - Files are encrypted, base64-encoded, and written to `embedded.go`
+
+### Extracting Files
+
+Extract all embedded files to a directory (decrypted):
+
+```bash
+./go-embedded-fs extract
+```
+
+By default, files are extracted to your platform-specific Downloads folder:
+- **Linux**: `~/Downloads`
+- **macOS**: `~/Downloads`
+- **Windows**: `%USERPROFILE%\Downloads`
+
+Extract to a custom directory:
+
+```bash
+./go-embedded-fs extract -output /path/to/directory
+```
+
+Or with a relative path:
+
+```bash
+./go-embedded-fs extract -output ./my-files
+```
+
+Example:
+```bash
+ENCRYPT_KEY="MySecretKey123" ./go-embedded-fs extract -output ./decrypted
+```
+
+**Note:** The output directory will be created automatically if it doesn't exist.
 
 ### Running the Server
 
@@ -118,6 +151,15 @@ The response includes the correct `Content-Type` header based on the file extens
 4. Decrypts using the key from `ENCRYPT_KEY`
 5. Serves decrypted content with proper Content-Type header
 
+### Extracting Files
+1. Determines output directory (Downloads folder or custom path)
+2. Creates output directory if it doesn't exist
+3. For each embedded file:
+   - Retrieves encrypted data from embedded map
+   - Base64-decodes the data
+   - Decrypts using the key from `ENCRYPT_KEY`
+   - Writes decrypted content to disk
+
 ## Security Considerations
 
 - **Key Management**: The encryption key should be kept secret and managed securely
@@ -148,6 +190,12 @@ curl http://localhost:9193/report.pdf -o report.pdf  # Download file
 # Or start server on a custom port
 ./go-embedded-fs -port 8080
 curl http://localhost:8080/                    # List files on custom port
+
+# Extract all files to Downloads folder
+./go-embedded-fs extract
+
+# Or extract to a specific directory
+./go-embedded-fs extract -output ./my-files
 ```
 
 ## Cross-Platform Compilation

@@ -15,6 +15,7 @@ const (
 func main() {
 	// Define flags
 	portFlag := flag.String("port", defaultServerPort, "Port to listen on")
+	outputFlag := flag.String("output", "", "Output directory for extracted files (default: Downloads folder)")
 
 	// Get encryption key from environment variable
 	keyString := os.Getenv(envKeyName)
@@ -51,14 +52,23 @@ func main() {
 		flag.CommandLine.Parse(os.Args[2:])
 		runServer(key, *portFlag)
 
+	case "extract":
+		// Parse flags after the extract command
+		flag.CommandLine.Parse(os.Args[2:])
+		if err := ExtractFiles(key, *outputFlag); err != nil {
+			log.Fatalf("Error extracting files: %v\n", err)
+		}
+
 	default:
 		fmt.Printf("Unknown command: %s\n", command)
 		fmt.Println("\nUsage:")
-		fmt.Println("  program                Start web server (default)")
-		fmt.Println("  program serve [-port]  Start web server")
-		fmt.Println("  program add <files>    Add and encrypt files")
+		fmt.Println("  program                     Start web server (default)")
+		fmt.Println("  program serve [-port]       Start web server")
+		fmt.Println("  program add <files>         Add and encrypt files")
+		fmt.Println("  program extract [-output]   Extract all files to directory")
 		fmt.Println("\nFlags:")
-		fmt.Println("  -port string  Port to listen on (default \"9193\")")
+		fmt.Println("  -port string    Port to listen on (default \"9193\")")
+		fmt.Println("  -output string  Output directory for extracted files (default: Downloads folder)")
 		os.Exit(1)
 	}
 }

@@ -12,17 +12,17 @@ type EmbeddedFile struct {
 var EmbeddedFiles = map[string]EmbeddedFile{
 	"test.txt": {
 		Name:          "test.txt",
-		EncryptedData: "sdYbDIq1hjp0UkikUt0wDcyOWCN0ndaNJrfuRM9LLi8d29vl1M4ZBGzT2ENM5xI27OMtPAvcQgf4GV60va/b2xJZfJLIratb0u0NGXxK2yf3m0HzbO9j6SsdrN+3RtoOL45QAVvId8A0ambZjS3q0ODpmFs=",
+		EncryptedData: "Y/fsXIy+EP3+jBEOVPl6wQ1t5Kmaz63nCwBWd0/QttljJIET5DV1RoDDActQLZLKODjS3vITdcvGYQcVdSgDyEkbP5ch5girTjaySgANDbcD5HAEnKYb23vOODqLm4A2K9EJRaqKFTpA34iJz8fGloOS2MA=",
 		ContentType:   "text/plain; charset=utf-8",
 	},
 	"test.html": {
 		Name:          "test.html",
-		EncryptedData: "kO7sJOpK9mTAOL8Ig/r1QRsn3yBwB6v3W21PGJoGxb7I4Z5dxByCAK8QD+9IPBuu3NFfjWwBWWUsHVsgWOzd4jr/7Un17TtubY3AztoDnbQATfbP00jDdrH4Stutx5GubklMACzopBWcKzuiPfGgdWByO5cDBFmwvqpTzxdJkSX8D6WrZ7E+UhOTp1ts5rkMcVjfcvXspRngF0XbSY5UA8VSqIX+XHGQjxavJS6fw/LR/P7j2IieOMc4LtqGXRyYNEzvPfPqqYqdyDicDDj3DBkjMMYX8JYSdL/ss4+LjTFTuPalqjSldJcapCuSuxpCxqFwtQHvrIU=",
+		EncryptedData: "jftBcO1LOzITI2cS42JSJOtWnS53XfGBi8WYK1jPKY99Fltwtdy7KMyRjQRdxurb1H7XTjgTaQJsPFCePHVSwzzlOo1iDNFfEnDdI+RHUohDdkbHcJ/scMmqkqQ3Q9+t65TUWDyBER7AINFoRQ7TgWiy/TXpFzEVdt8YAXN9npVw51k6DimSvHRJfXskLsqPzyl3V5JXjtGTrjTp/bcWldcvEEj9PkRmA998I/vuRQwgmxVBSHj8ME9bbb4jsnTTW4jUNCNjS+oKkQiL7I8A8t6hPDpengdn0UF3mi81PaUSivWIjP7JD4iNFb7j9v0HkM03QYIGHl0=",
 		ContentType:   "text/html; charset=utf-8",
 	},
 	"test.json": {
 		Name:          "test.json",
-		EncryptedData: "VlB7VUlcthnN4zG7dKxI2AeXThzqmD4bN/rd4ZVOXsfboJX5YnF+WL347MUn/DQwpVU0+s6viGFqd6eoSXX6G1iimUmgtis5yBYQYDPb39jWZ9JHC3jeToDMsz6nv6BiVcDRsLT8BcjzpqTflV2s/Zh9VJXQkqPedG1WenSNbwKptfd+h52Psn+8KQG+xS4pugL1+9A=",
+		EncryptedData: "dUjFXkEvwcmNooAGUNJ54BMYrfO+WkUPg1Vz3eIveImlXNsnlWw4ftsmjJAv3TWjqaPnh9SGcc6rr+Z0PVKm5ClxZ5zKBZrb2Bn+dB2zckhxi/b+uR9yV4JcooLcOYoAhka+Qw/EYqXE3IvRP70xWF3B71TTapGiOIXB7GarzxBXVK+cPRO8rYnK3hXPEUIqFTOKG18=",
 		ContentType:   "application/json",
 	},
 }
