@@ -74,13 +74,11 @@ func main() {
 }
 
 func runServer(key []byte, port string) {
-	if len(EmbeddedFiles) == 0 {
-		fmt.Println("Warning: No files are currently embedded.")
-		fmt.Println("Use 'program add <files>' to add files first.")
-		fmt.Println()
+	server, err := NewServer(key)
+	if err != nil {
+		log.Fatalf("Failed to create server: %v\n", err)
 	}
 
-	server := NewServer(key)
 	if err := server.Start(port); err != nil {
 		log.Fatalf("Server error: %v\n", err)
 	}

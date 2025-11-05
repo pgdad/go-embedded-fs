@@ -4,7 +4,7 @@ A Go application that embeds encrypted files in the binary and serves them via H
 
 ## Features
 
-- **Encrypted Embedded Files**: Files are encrypted and embedded directly in the Go binary source code
+- **Encrypted Embedded Files**: Files are encrypted, stored in the repository, and embedded in the binary using Go's embed package
 - **Symmetric Encryption**: Uses AES-256-GCM for secure encryption/decryption
 - **HTTP Server**: Serves decrypted files on-demand via HTTP
 - **File Extraction**: Extract all embedded files to a directory
@@ -49,8 +49,10 @@ ENCRYPT_KEY="MySecretKey123" ./go-embedded-fs add document.pdf image.png present
 
 **Important Notes:**
 - Each `add` operation replaces ALL previously embedded files
+- Files are encrypted, base64-encoded, and stored as JSON in the `encrypted-files/` directory
+- The `add` command automatically stages changes in git
 - After adding files, you must rebuild the binary: `go build -o go-embedded-fs`
-- Files are encrypted, base64-encoded, and written to `embedded.go`
+- Commit the changes to git to keep encrypted files in version control
 
 ### Extracting Files
 
@@ -138,24 +140,28 @@ The response includes the correct `Content-Type` header based on the file extens
 ## How It Works
 
 ### Adding Files (Encryption)
-1. Reads files from disk
-2. Encrypts each file using AES-256-GCM with the key from `ENCRYPT_KEY`
-3. Base64-encodes the encrypted data
-4. Writes the encoded data into `embedded.go` source file
+1. Removes old encrypted files from `encrypted-files/` directory
+2. Reads files from disk
+3. Encrypts each file using AES-256-GCM with the key from `ENCRYPT_KEY`
+4. Base64-encodes the encrypted data
 5. Detects and stores MIME type for each file
+6. Writes metadata as JSON files to `encrypted-files/` directory
+7. Automatically stages changes in git repository
 
 ### Serving Files (Decryption)
-1. Receives HTTP request for a file
-2. Retrieves encrypted data from embedded map
-3. Base64-decodes the data
-4. Decrypts using the key from `ENCRYPT_KEY`
-5. Serves decrypted content with proper Content-Type header
+1. Loads encrypted files from embedded filesystem (using Go's embed package)
+2. Receives HTTP request for a file
+3. Retrieves encrypted data from embedded files
+4. Base64-decodes the data
+5. Decrypts using the key from `ENCRYPT_KEY`
+6. Serves decrypted content with proper Content-Type header
 
 ### Extracting Files
-1. Determines output directory (Downloads folder or custom path)
-2. Creates output directory if it doesn't exist
-3. For each embedded file:
-   - Retrieves encrypted data from embedded map
+1. Loads encrypted files from embedded filesystem (using Go's embed package)
+2. Determines output directory (Downloads folder or custom path)
+3. Creates output directory if it doesn't exist
+4. For each embedded file:
+   - Retrieves encrypted data from embedded files
    - Base64-decodes the data
    - Decrypts using the key from `ENCRYPT_KEY`
    - Writes decrypted content to disk
@@ -165,7 +171,8 @@ The response includes the correct `Content-Type` header based on the file extens
 - **Key Management**: The encryption key should be kept secret and managed securely
 - **Key Length**: Use a strong, random key (32 bytes for AES-256)
 - **Environment Variables**: Never commit the encryption key to version control
-- **Source Protection**: The encrypted data in `embedded.go` is only as secure as the encryption key
+- **Repository Security**: Encrypted files in `encrypted-files/` are stored in git and are only as secure as the encryption key
+- **Version Control**: The encrypted files can be safely committed to public repositories as long as the encryption key remains secret
 - **HTTPS**: For production use, consider running behind a reverse proxy with HTTPS
 
 ## Example Workflow

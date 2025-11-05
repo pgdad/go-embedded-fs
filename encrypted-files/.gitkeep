@@ -1,0 +1,2 @@
+# This directory stores encrypted and base64-encoded files
+# Files in this directory are embedded into the binary using go:embed

@@ -9,6 +9,12 @@ import (
 
 // ExtractFiles decrypts and extracts all embedded files to the specified directory
 func ExtractFiles(key []byte, outputDir string) error {
+	// Load embedded files
+	files, err := GetEmbeddedFiles()
+	if err != nil {
+		return fmt.Errorf("failed to load embedded files: %w", err)
+	}
+
 	// Resolve the output directory
 	dir, err := resolveOutputDirectory(outputDir)
 	if err != nil {
@@ -20,15 +26,15 @@ func ExtractFiles(key []byte, outputDir string) error {
 		return fmt.Errorf("failed to create output directory %s: %w", dir, err)
 	}
 
-	if len(EmbeddedFiles) == 0 {
+	if len(files) == 0 {
 		return fmt.Errorf("no files are currently embedded")
 	}
 
-	fmt.Printf("Extracting %d file(s) to: %s\n\n", len(EmbeddedFiles), dir)
+	fmt.Printf("Extracting %d file(s) to: %s\n\n", len(files), dir)
 
 	// Extract each file
 	successCount := 0
-	for name, file := range EmbeddedFiles {
+	for name, file := range files {
 		outputPath := filepath.Join(dir, name)
 
 		// Decrypt the file
@@ -48,9 +54,9 @@ func ExtractFiles(key []byte, outputDir string) error {
 		successCount++
 	}
 
-	fmt.Printf("\nSuccessfully extracted %d of %d file(s)\n", successCount, len(EmbeddedFiles))
+	fmt.Printf("\nSuccessfully extracted %d of %d file(s)\n", successCount, len(files))
 
-	if successCount < len(EmbeddedFiles) {
+	if successCount < len(files) {
 		return fmt.Errorf("some files failed to extract")
 	}
 
