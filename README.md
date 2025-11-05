@@ -7,6 +7,7 @@ A Go application that embeds encrypted files in the binary and serves them via H
 - **Encrypted Embedded Files**: Files are encrypted and embedded directly in the Go binary source code
 - **Symmetric Encryption**: Uses AES-256-GCM for secure encryption/decryption
 - **HTTP Server**: Serves decrypted files on-demand via HTTP
+- **Configurable Port**: Default port 9193, customizable via command-line flag
 - **Cross-Platform**: Works on Linux, Windows, and macOS
 - **Simple API**: JSON file listing and direct file access
 - **Content-Type Detection**: Automatically sets correct MIME types based on file extensions
@@ -52,7 +53,7 @@ ENCRYPT_KEY="MySecretKey123" ./go-embedded-fs add document.pdf image.png present
 
 ### Running the Server
 
-Start the HTTP server (default mode):
+Start the HTTP server on the default port (9193):
 
 ```bash
 ./go-embedded-fs
@@ -64,7 +65,17 @@ Or explicitly:
 ./go-embedded-fs serve
 ```
 
-The server will start on port 8989.
+Start the server on a custom port:
+
+```bash
+./go-embedded-fs -port 8080
+```
+
+Or with the serve command:
+
+```bash
+./go-embedded-fs serve -port 8080
+```
 
 ## API Endpoints
 
@@ -73,7 +84,7 @@ The server will start on port 8989.
 Get a JSON list of all available files:
 
 ```bash
-curl http://localhost:8989/
+curl http://localhost:9193/
 ```
 
 Response:
@@ -86,7 +97,7 @@ Response:
 Retrieve a specific file (automatically decrypted):
 
 ```bash
-curl http://localhost:8989/file1.pdf > file1.pdf
+curl http://localhost:9193/file1.pdf > file1.pdf
 ```
 
 The response includes the correct `Content-Type` header based on the file extension.
@@ -131,8 +142,12 @@ go build -o go-embedded-fs
 ./go-embedded-fs
 
 # In another terminal, test the server
-curl http://localhost:8989/                    # List files
-curl http://localhost:8989/report.pdf -o report.pdf  # Download file
+curl http://localhost:9193/                    # List files
+curl http://localhost:9193/report.pdf -o report.pdf  # Download file
+
+# Or start server on a custom port
+./go-embedded-fs -port 8080
+curl http://localhost:8080/                    # List files on custom port
 ```
 
 ## Cross-Platform Compilation
